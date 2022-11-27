@@ -6,5 +6,6 @@ crsr = conn.cursor()
 query = 'SELECT * FROM inflation_monthlycpi LIMIT 10'
 crsr.execute(query)
 results = crsr.fetchall()
-
-print(pd.DataFrame(results))
+df = pd.DataFrame(results)
+df.columns = [description[0] for description in crsr.description]
+print(df)

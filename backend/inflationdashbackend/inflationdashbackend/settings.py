@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'inflation.apps.InflationConfig',
+    
+    'rest_framework',
 ]
 
 MIDDLEWARE = [

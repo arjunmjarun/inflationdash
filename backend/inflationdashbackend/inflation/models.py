@@ -28,7 +28,7 @@ class MonthlyCPI(models.Model):
     cpi_year_month = models.TextField()
     cpi_internal_code = models.TextField(default='')
     cpi_description = models.TextField()
-    cpi = models.DecimalField(max_digits=10, decimal_places=10)
+    cpi = models.IntegerField()
 
     def __str__(self):
         return self.name
