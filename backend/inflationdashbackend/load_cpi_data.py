@@ -43,6 +43,9 @@ def clean_data(df, filename, description_map):
         - filename: The name of the source CSV for the given DF
         - description_map: The dictionary that maps a given file to a file description 
     '''
+    df = df.loc[df[filename[:-4]] != '.'].reset_index(drop=True)
+    print(df.head())
+
     uuids = [str(uuid.uuid4()) for x in range(len(df))]
     df['monthly_cpi_id'] = uuids
     df['cpi_year'] = pd.to_datetime(df['DATE']).dt.year
@@ -52,11 +55,12 @@ def clean_data(df, filename, description_map):
     df['cpi_year_month'] = df['cpi_year'].astype(str) + '-' + df['cpi_month'].astype(str)
     df['cpi_internal_code'] = filename[:-4]
     df['cpi_description'] = description_map.get(filename)
-    df['DATE'] = pd.to_datetime(df['DATE'])
+    df['DATE'] = pd.to_datetime(df['DATE']).dt.strftime('%Y-%m-%d')
     df.rename(columns = {
         'DATE': 'cpi_date',
         filename[:-4]: 'cpi'
     }, inplace=True)
+    df['cpi'] = df['cpi'].astype(float).astype(int)
     return df
 
 def load_data(df, conn, table_name):
@@ -68,7 +72,7 @@ def load_data(df, conn, table_name):
          - conn: A SQLite connection object
          - table_name: The specific table the dataframe is being loaded to
     '''
-    df.to_sql(table_name, conn, if_exists='append', index=False)
+    df.to_sql(table_name, conn, if_exists='replace', index=False)
 
 conn = sql.connect('db.sqlite3')
 
