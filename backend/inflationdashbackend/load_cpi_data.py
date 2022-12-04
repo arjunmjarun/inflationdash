@@ -72,7 +72,7 @@ def load_data(df, conn, table_name):
          - conn: A SQLite connection object
          - table_name: The specific table the dataframe is being loaded to
     '''
-    df.to_sql(table_name, conn, if_exists='replace', index=False)
+    df.to_sql(table_name, conn, if_exists='append', index=False)
 
 conn = sql.connect('db.sqlite3')
 

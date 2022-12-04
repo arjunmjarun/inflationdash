@@ -23,10 +23,20 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-wtnnr0l%7fh(l#t2t51f7u0ojwxz!39$rjbec$6yb^q*1xqngd'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['*']
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_HEADERS = (
+    'content-disposition', 
+    'accept-encoding', 
+    'content-type', 
+    'accept', 
+    'origin', 
+    'authorization',
+    'cache-control'
+)
 
 # Application definition
 
@@ -39,12 +49,15 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'inflation.apps.InflationConfig',
     
+    'corsheaders',
     'rest_framework',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
