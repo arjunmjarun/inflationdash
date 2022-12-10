@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:http/http.dart' as http;
 
 import '../data/monthly_cpi.dart';
@@ -14,13 +15,20 @@ class MonthlyCPIList extends StatefulWidget {
 
 class _MonthlyCPIListState extends State<MonthlyCPIList> {
   List<MonthlyCPI> monthlyCPIList = [];
+  List<double> cpi_only_list = [];
+  List<double> x_axis_points = new List<double>.generate(910, (i) => i+1);
+  List<FlSpot> final_list = [];
 
   void getMonthlyCPIList() async {
     MonthlyCPIApi.getMonthlyCPIList().then((response) {
       setState(() {
         Iterable list = json.decode(response.body);
         monthlyCPIList = list.map((model) => MonthlyCPI.fromJson(model)).toList();
-        print(monthlyCPIList.elementAt(0).cpi_description);
+        cpi_only_list = monthlyCPIList.map((x) => x.cpi.toDouble()).toList();
+        for (int i = 0; i <= 5; i++) {
+          final_list.add(FlSpot(x_axis_points[i], cpi_only_list[i]));
+        }
+        print(final_list);
       });
     });
   }
@@ -37,14 +45,19 @@ class _MonthlyCPIListState extends State<MonthlyCPIList> {
         title: Text("Monthly CPI Data"),
       ),
       body: Container(
-        child: ListView.builder(
-          itemCount: monthlyCPIList.length,
-          itemBuilder: (context, index) {
-            return ListTile(
-              title: Text(monthlyCPIList[index].cpi_internal_code),
-              subtitle: Text(monthlyCPIList[index].cpi_description),
-            );
-          }),
+          padding: const EdgeInsets.all(10),
+          width: double.infinity,
+          height: 300,
+          child: LineChart(
+            LineChartData(
+              borderData: FlBorderData(show: false),
+              lineBarsData: [
+                LineChartBarData(spots:
+                  final_list
+                )
+              ]
+            )
+          )
       ));
   }
 }
