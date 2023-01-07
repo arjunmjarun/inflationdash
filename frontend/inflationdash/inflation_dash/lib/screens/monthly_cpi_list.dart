@@ -14,21 +14,21 @@ class MonthlyCPIList extends StatefulWidget {
 }
 
 class _MonthlyCPIListState extends State<MonthlyCPIList> {
-  List<MonthlyCPI> monthlyCPIList = [];
+  List<InflationPercentage> monthlyCPIList = [];
   List<double> cpi_only_list = [];
-  List<double> x_axis_points = new List<double>.generate(910, (i) => i+1);
+  List<double> x_axis_points = new List<double>.generate(10, (i) => i+1);
   List<FlSpot> final_list = [];
 
   void getMonthlyCPIList() async {
     MonthlyCPIApi.getMonthlyCPIList().then((response) {
       setState(() {
         Iterable list = json.decode(response.body);
-        monthlyCPIList = list.map((model) => MonthlyCPI.fromJson(model)).toList();
-        cpi_only_list = monthlyCPIList.map((x) => x.cpi.toDouble()).toList();
+        monthlyCPIList = list.map((model) => InflationPercentage.fromJson(model)).toList();
+        cpi_only_list = monthlyCPIList.map((x) => x.inflation_percentage).toList();
+        print(cpi_only_list);
         for (int i = 0; i <= 5; i++) {
           final_list.add(FlSpot(x_axis_points[i], cpi_only_list[i]));
         }
-        print(final_list);
       });
     });
   }
