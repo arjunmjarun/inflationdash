@@ -23,9 +23,9 @@ class _MonthlyCPIListState extends State<MonthlyCPIList> {
     MonthlyCPIApi.getMonthlyCPIList().then((response) {
       setState(() {
         Iterable list = json.decode(response.body);
+        print(list);
         monthlyCPIList = list.map((model) => InflationPercentage.fromJson(model)).toList();
-        cpi_only_list = monthlyCPIList.map((x) => x.inflation_percentage).toList();
-        print(cpi_only_list);
+        cpi_only_list = monthlyCPIList.map((x) => x.inflation_percentage * 100).toList();
         for (int i = 0; i <= 5; i++) {
           final_list.add(FlSpot(x_axis_points[i], cpi_only_list[i]));
         }
@@ -51,12 +51,18 @@ class _MonthlyCPIListState extends State<MonthlyCPIList> {
           child: LineChart(
             LineChartData(
               borderData: FlBorderData(show: false),
+              titlesData: FlTitlesData(
+                show: true,
+                topTitles: AxisTitles(
+                  axisNameWidget: Text("Monthly Inflation Percentage")
+                )
+              ),
               lineBarsData: [
                 LineChartBarData(spots:
                   final_list
                 )
               ]
-            )
+            ),
           )
       ));
   }
