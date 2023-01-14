@@ -20,7 +20,7 @@ class MonthlyCPI {
 
   Map toJson() {
     return {
-      'monthl_cpi_id': monthly_cpi_id,
+      'monthly_cpi_id': monthly_cpi_id,
       'cpi_date': cpi_date,
       'cpi_year': cpi_year,
       'cpi_month': cpi_month,
@@ -28,6 +28,28 @@ class MonthlyCPI {
       'cpi_internal_code': cpi_internal_code,
       'cpi_description': cpi_description,
       'cpi': cpi
+    };
+  }
+}
+
+class InflationPercentage {
+  int cpi_2021;
+  int cpi_2022;
+  int cpi_month_2022;
+  double inflation_percentage;
+
+  InflationPercentage.fromJson(Map json)
+    : cpi_2021 = json['cpi_2021'],
+      cpi_2022 = json['cpi_2022'],
+      cpi_month_2022 = json['cpi_month_2022'],
+      inflation_percentage = json['inflation_percentage'];
+
+  Map toJson() {
+    return {
+      'cpi_2021': cpi_2021,
+      'cpi_2022': cpi_2022,
+      'cpi_month_2022': cpi_month_2022,
+      'inflation_percentage': inflation_percentage
     };
   }
 }
